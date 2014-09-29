@@ -1,0 +1,16 @@
+{
+    "name": "chameleonbr/simple-urn-php",
+    "description": "simple-urn-php",
+    "authors": [
+        {
+            "name": "chameleonbr",
+            "email": "chameleonbr@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": {"SimpleURN": "src/"}
+    },
+    "require": {
+    },
+    "license": "MIT"
+}
