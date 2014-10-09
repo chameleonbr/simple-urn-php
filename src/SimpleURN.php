@@ -46,7 +46,6 @@ class SimpleURN
     public function handle($urn = '')
     {
         $urnArr = $this->parse($urn);
-        var_dump($urnArr);
         if (is_array($urnArr) && isset($this->handlers[$urnArr['name']]) && is_callable($this->handlers[$urnArr['name']])) {
             $func = $this->handlers[$urnArr['name']];
             return $func($urnArr['name'], $urnArr['value']);
