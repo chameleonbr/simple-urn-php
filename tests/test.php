@@ -6,13 +6,13 @@ $urn = new SimpleURN();
 
 $urn->registerUrnHandler('pr:cadicms', function($name, $val) {
     //implements some checks and validation
-    return ['filtro' => 2, 'parametro' => $val];
+    return ['filtro' => 'cad', 'parametro' => $val];
 });
 $urn->registerUrnHandler('cnpj', function($name, $val) {
-    return ['filtro' => 1, 'parametro' => $val];
+    return ['filtro' => 'cnpj', 'parametro' => $val];
 });
 $urn->registerUrnHandler('cnpjraiz', function($name, $val) {
-    return ['filtro' => 3, 'parametro' => $val];
+    return ['filtro' => 'raiz', 'parametro' => $val];
 });
 $urn->registerNotFoundHandler(function($name, $val) {
     return ['name' => $name, 'value' => $val];

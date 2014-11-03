@@ -30,34 +30,34 @@ class SimpleURN
         $this->notFound = $handler;
         return $this;
     }
-
-    public function parse($urn = '')
-    {
-        $urn = str_replace('urn:', '', strtolower($urn));
-        $sep = strrpos($urn, ':');
-        if ($sep === false) {
-            return false;
-        }
-        $name = substr($urn, 0, $sep);
-        $value = substr($urn, $sep + 1);
-        return compact('name', 'value');
-    }
-
+    
     public function handle($urn = '')
     {
-        $urnArr = $this->parse($urn);
-        if (is_array($urnArr) && isset($this->handlers[$urnArr['name']]) && is_callable($this->handlers[$urnArr['name']])) {
-            $func = $this->handlers[$urnArr['name']];
-            return $func($urnArr['name'], $urnArr['value']);
-        } elseif (is_array($urnArr) && is_callable($this->notFound)) {
-            $func = $this->notFound;
-            return $func($urnArr['name'], $urnArr['value']);
-        } elseif (is_callable($this->notFound)) {
-            $func = $this->notFound;
-            return $func(null, $urn);
-        } else {
-            return false;
+        $matches = null;
+        $urn = str_replace(['urn:', 'URN:'], '', $urn);
+        foreach ($this->handlers as $key => $func) {
+            preg_match('/^' . $key . ':(.*)/i', $urn, $matches);
+            if (!empty($matches)) {
+                break;
+            }
         }
+        if (!empty($matches)) {
+            if (strpos($matches[1], ':') !== false) {
+                $value = explode(':', $matches[1]);
+            } else {
+                $value = $matches[1];
+            }
+            return $func($key, $value);
+        } else {
+            $key = null;
+            $value = $urn;
+        }
+
+        if (is_callable($this->notFound)) {
+            $func = $this->notFound;
+            return $func($key, $value);
+        }
+        return false;
     }
 
 }
